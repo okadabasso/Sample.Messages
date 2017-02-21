@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0" DefaultTarget="Build">
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>$(MSBuildThisFileDirectory)\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin\</OutputPath>
+    <TemporaryDir>out\</TemporaryDir>
+    <Namespace>Sample.Messages</Namespace>
+    <AssemblyName>Sample.Messages</AssemblyName>
+    <AssemblyInfo>AssemblyInfo.cs</AssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProductName>Sample.Messages</ProductName>
+    <CompanyName>CRAFT</CompanyName>
+    <Major>1</Major>
+    <Minor>4</Minor><!-- 機能追加、改修等 -->
+    <Build>5</Build><!-- リリース時に更新 -->
+    <Revision>0</Revision><!-- dummy(svn revisionの代わり) -->
+    <ReleaseYear>2017</ReleaseYear><!-- dummy(svn revisionの代わり) -->
+  </PropertyGroup>
+
+  <!-- ニュートラル言語用メッセージ -->
+  <ItemGroup>
+    <ResourceText Include="Common.txt" />
+  </ItemGroup>
+  <!-- ローカライズメッセージ -->
+  <ItemGroup>
+    <LocalizedText Include="Common.en.txt">
+        <Culture>en</Culture>
+    </LocalizedText>
+    <LocalizedText Include="Common.de.txt">
+        <Culture>de</Culture>
+    </LocalizedText>
+  </ItemGroup>
+
+  <Target Name="Rebuild">
+    <CallTarget Targets="Clean" />
+    <CallTarget Targets="Build" />
+    
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="Prepare" />
+    <CallTarget Targets="CreateResources" />
+    <CallTarget Targets="CreateLocalizedResources" />
+    <CallTarget Targets="CreateSatelliteAssembly" />
+    <CallTarget Targets="CreateLibrary" />
+  </Target>
+  <Target Name="Prepare">
+    <MakeDir  Directories="$(TemporaryDir)" Condition="!Exists($(TemporaryDir))" />
+    <MakeDir  Directories="$(OutputPath)" Condition="!Exists($(OutputPath))" />
+  </Target>
+
+  <!-- ニュートラル言語用メッセージリソースを作成して参照用クラスを生成する -->
+  <Target Name="CreateResources"  Inputs="@(ResourceText)" Outputs="%(Identity).Dummy">
+    <GenerateResource
+        Sources="%(ResourceText.Identity)"
+        PublicClass="true"
+        StronglyTypedLanguage="C#"
+        StronglyTypedNamespace="$(Namespace)"
+        StronglyTypedClassName="%(FileName)"
+        OutputResources="$(TemporaryDir)$(Namespace).%(FileName).resources">
+        <Output TaskParameter="OutputResources" ItemName="Resources"/>
+    </GenerateResource>
+  </Target>
+
+  <!-- ローカライズされたメッセージリソースを作成する -->
+  <Target Name="CreateLocalizedResources"  Inputs="@(LocalizedText)" Outputs="%(Identity).Dummy">
+    <GenerateResource
+        Sources="%(LocalizedText.Identity)"
+        OutputResources="$(TemporaryDir)$(Namespace).%(FileName).resources">
+    </GenerateResource>
+  </Target>
+
+  <!-- ニュートラル言語用メッセージリソースアセンブリを作成する -->
+  <Target Name="CreateLibrary"  DependsOnTargets="CreateResources">
+      <AssemblyInfo
+            CodeLanguage="CS"
+            OutputFile="$(AssemblyInfo)"
+            AssemblyProduct="$(ProductName)"
+            AssemblyTitle="$(ProductName)"
+            AssemblyCompany="$(CompanyName)"
+            AssemblyCopyright="© $(CompanyName) $(ReleaseYear)"
+            AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)"
+            AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)"
+            AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)">
+            <Output TaskParameter="OutputFile" ItemName="UpdatedAssemblyVersionFiles"/>
+    </AssemblyInfo>
+
+    <Message Text="ver=$(Major).$(Minor).$(Build).$(Revision)" />
+    <Message Text="config=$(Configuration)" />
+    <Copy SourceFiles="$(AssemblyInfo)" DestinationFolder="$(TemporaryDir)" />
+    <CreateItem Include="$(TemporaryDir)*.cs" >
+       <Output TaskParameter="Include" ItemName="SourceFiles"/>
+    </CreateItem>
+    <CSC 
+        Sources="@(SourceFiles)"
+        OutputAssembly="$(OutputPath)$(AssemblyName).dll"
+        TargetType="library"
+        Resources="@(Resources)"
+    >
+    </CSC>
+  </Target>
+
+  <!-- ローカライズされたサテライトアセンブリを作成する -->
+  <Target Name="CreateSatelliteAssembly" DependsOnTargets="CreateLocalizedResources;CreateLibrary">
+    <MakeDir Directories="$(OutputPath)\%(LocalizedText.Culture)" />
+    <Al
+        EmbedResources="$(TemporaryDir)$(Namespace).%(LocalizedText.FileName).resources"
+        Culture="%(LocalizedText.Culture)"
+        OutputAssembly="$(OutputPath)%(LocalizedText.Culture)\$(AssemblyName).resources.dll"
+        Version="$(Major).$(Minor).$(Build).$(Revision)"
+    >
+    </Al>
+  </Target>
+  <Target Name="Clean">
+    <RemoveDir Directories="$(TemporaryDir)"  Condition="Exists($(TemporaryDir))" />
+    <RemoveDir Directories="$(OutputPath)"  Condition="Exists($(OutputPath))" />
+  </Target>
+  
+</Project>

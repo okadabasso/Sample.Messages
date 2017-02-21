@@ -1,0 +1,39 @@
+;
+; Messge Resource File
+; Language = ja
+;
+;	MessageID = Message の形式で記述
+;
+; 入力項目名などの可変項目は{0},{1},...として記述し、プログラムで設定
+
+;
+; Error Messages?
+; 入力チェックなどのメッセージ
+ERR_INPUT_TOO_LONG = {0} 入力文字が長すぎます。{1}文字まで
+ERR_INVALID_FORMAT = {0} 入力形式が違います。
+
+ERR_INVALID_RANGE = {0} 範囲を超えています。{1} から {2}
+ERR_REQUIRED_MISSING = {0} 必須入力です。
+;
+; 例外時のメッセージ
+EXCEPTION_DEFAULT_MESSAGE = アプリケーション例外が発生しました。
+EXCEPTION_INVALID_ARG_LENGTH = 入力引数の長さが不正です。
+EXCEPTION_INVALID_ARG_CHARACTERS = 入力引数に認識できない文字が含まれています。
+
+MSG_RESULT_NO_DATA = 検索条件に一致するものが見つかりませんでした。
+
+inputValidator.invalidFormat = 入力形式が正しくありません。
+inputValidator.required = 必ず入力してください。
+inputValidator.invalidPrecision = 有効桁 {%precision}桁まで入力できます。
+inputValidator.invalidIntegerPart = 整数部 {%integerLength}桁まで入力できます。
+inputValidator.invalidDecimalPart = 小数点以下 {%decimalLength}桁まで入力できます。
+inputValidator.lengthTooShort = {%minCharacters}文字以上を入力してください。
+inputValidator.lengthTooLong = {%maxCharacters}文字まで入力できます。
+inputValidator.widthTooShort = 全角{%minCharacters}文字または半角{%minWidth}文字以上を入力してください。
+inputValidator.widthTooLong = 全角{%maxCharacters}文字または半角{%maxWidth}文字まで入力できます。
+inputValidator.invalidRange = 入力できる範囲を超えています。{%min}から{%max}の範囲で入力してください。
+inputValidator.invalidPattern = 入力パターンに合わせて入力してください。
+inputValidator.invalidDate = 日付は{%format}の形式で入力してください。
+
+
+

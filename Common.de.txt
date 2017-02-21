@@ -1,0 +1,39 @@
+;
+; Messge Resource File
+; Language = de
+;
+;	MessageID = Message の形式で記述
+;
+; 入力項目名などの可変項目は{0},{1},...として記述し、プログラムで設定
+
+;
+; Error Messages?
+; 入力チェックなどのメッセージ
+ERR_INPUT_TOO_LONG = {0} input too long.max {1} characters in german
+ERR_INVALID_FORMAT = {0} invalid format.  in german
+
+ERR_INVALID_RANGE = {0} invalid range. {1} to {2}  in german
+ERR_REQUIRED_MISSING = {0} is required.  in german
+;
+; 例外時のメッセージ
+EXCEPTION_DEFAULT_MESSAGE = application exception occured  in german
+EXCEPTION_INVALID_ARG_LENGTH = invalid argument length  in german
+EXCEPTION_INVALID_ARG_CHARACTERS = invalid argument characters  in german
+
+MSG_RESULT_NO_DATA = data not found.  in german
+
+inputValidator.invalidFormat = invalid format
+inputValidator.required = input required
+inputValidator.invalidPrecision = precision allowed {%precision} columns
+inputValidator.invalidIntegerPart = number {%integerLength} columns allowed
+inputValidator.invalidDecimalPart = 小数点以下 {%decimalLength}桁まで入力できます。
+inputValidator.lengthTooShort = input {%minCharacters} characters
+inputValidator.lengthTooLong = input {%maxCharacters}
+inputValidator.widthTooShort = 全角{%minCharacters}文字または半角{%minWidth}文字以上を入力してください。
+inputValidator.widthTooLong = 全角{%maxCharacters}文字または半角{%maxWidth}文字まで入力できます。
+inputValidator.invalidRange = 入力できる範囲を超えています。{%min}から{%max}の範囲で入力してください。
+inputValidator.invalidPattern = 入力パターンに合わせて入力してください。
+inputValidator.invalidDate = 日付は{%format}の形式で入力してください。
+
+
+
