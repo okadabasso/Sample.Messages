@@ -46,6 +46,25 @@ MSG_RESULT_NO_DATA = data not found.
 
 see Sample.Messages.csproj file.
 
+### add another resource text file
+
+If you want to add another resource text file, add file and add entry to  ItemGroup/ResourceText
+like this.
+
+```Foo.txt
+; in japanese culture
+ErrorMessage = new message
+
+```
+
+```Sample.Messages.csproj
+<ResourceText Include="Foo.txt" />
+```
+
+you can access to new message class as "Sample.Messages.Foo".
+
+
+
 namespace, version, assembly name ,etc... are sample. define as you want to define.
 
 ## build resource assemblies
